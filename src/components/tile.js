@@ -8,7 +8,7 @@ function Tile(props) {
 
 	return (
 		<div
-			className={props.class}
+			className={props.tileId === 0 ? "emptyTile" : "tile"}
 			data-id={props.tileId}
 			data-row={props.row}
 			data-col={props.col}
