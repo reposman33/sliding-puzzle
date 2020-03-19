@@ -1,0 +1,21 @@
+.row {
+	align-content: space-around;
+	display: flex;
+	height: 25%;
+	justify-content: space-around;
+	width: 100%;
+
+	& .tile {
+		background-color: #eeecdf;
+		border: 1px inset #454955;
+		cursor: grabbing;
+		display: inline-block;
+		height: 95%;
+		width: 24%;
+	}
+
+	& .emptyTile {
+		background-color: black;
+		width: 24%;
+	}
+}
