@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Row } from "./row";
 import "./board.scss";
 
-function Board() {
-	const nrOfRows = 4;
-	const colsPerRow = 4;
-	const emptyTile = 0;
-	const board = {};
+const nrOfRows = 4;
+const colsPerRow = 4;
+const emptyTile = 0;
+const makeBoard = () => {
+	const board = [];
 	for (let row = 0; row < nrOfRows; row++) {
 		board[row] = {};
 		for (let col = 0; col < colsPerRow; col++) {
@@ -22,7 +22,12 @@ function Board() {
 			};
 		}
 	}
+	return board;
+};
 
+const board = makeBoard();
+
+function Board() {
 	const [boardState, setBoardState] = useState(board);
 
 	const onHandleClick = tile => {
