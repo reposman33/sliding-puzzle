@@ -2,33 +2,56 @@ import React, { useState } from "react";
 import { Row } from "./row";
 import "./board.scss";
 
-//const onClick = (tile: {}) => {};
-
 function Board() {
+	const nrOfRows = 4;
 	const colsPerRow = 4;
-	const rowsPerBoard = 4;
-	const rows = [0, 1, 2, 3];
-	const cols = [0, 1, 2, 3];
-	const initialState = rows.map(row =>
-		cols.map(col => ({ tileId: `tile${row * colsPerRow + col}`, row: row, col: col }))
-	);
+	const emptyTile = 0;
+	const board = {};
+	for (let row = 0; row < nrOfRows; row++) {
+		board[row] = {};
+		for (let col = 0; col < colsPerRow; col++) {
+			const tileId = row * colsPerRow + col;
+			const type = tileId === emptyTile ? "emptyTile" : "tile";
 
-	const [boardState, setBoardState] = useState(initialState);
+			board[row][col] = {
+				tileId: tileId,
+				row: row,
+				col: col,
+				classList: [type],
+				type: type
+			};
+		}
+	}
+
+	const [boardState, setBoardState] = useState(board);
+
 	const onHandleClick = tile => {
 		if (tile.type === "emptyTile") {
 			return;
 		}
-	};
-
-	const makeRows = (rowsPerBoard, colsPerRow, onHandleClick) => {
-		const rows = [];
-		for (let row = 0; row < rowsPerBoard; row++) {
-			rows.push(<Row key={row} row={row} colsPerRow={colsPerRow} onHandleClick={onHandleClick} />);
+		const move = determineMove(tile);
+		if (move) {
+			const newBoard = { ...boardState };
+			newBoard[tile.row][tile.col].classList.push(move);
+			setBoardState(newBoard);
 		}
-		return rows;
 	};
 
-	return <div className='board'>{makeRows(rowsPerBoard, colsPerRow, onHandleClick)}</div>;
+	const determineMove = tile =>
+		tile.row > 0 && boardState[tile.row - 1][tile.col].type === "emptyTile"
+			? "north"
+			: tile.row < nrOfRows && boardState[tile.row + 1][tile.col].type === "emptyTile"
+			? "south"
+			: tile.col > 0 && boardState[tile.row][tile.col - 1].type === "emptyTile"
+			? "west"
+			: tile.row < colsPerRow && boardState[tile.row][tile.col + 1].type === "emptyTile"
+			? "east"
+			: undefined;
+
+	const makeRows = () =>
+		Object.keys(boardState).map(i => <Row key={i} row={boardState[i]} onHandleClick={onHandleClick} />);
+
+	return <div className='board'>{makeRows()}</div>;
 }
 
 export { Board };
