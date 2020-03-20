@@ -3,15 +3,20 @@ import "./tile.scss";
 
 function Tile(props) {
 	const onClick = () => {
-		props.onHandleClick({ type: props.tileId, row: props.row, col: props.col });
+		props.onHandleClick({
+			type: props.tile.type,
+			row: props.tile.row,
+			col: props.tile.col,
+			tileId: props.tile.tileId
+		});
 	};
 
 	return (
 		<div
-			className={props.tileId === 0 ? "emptyTile" : "tile"}
-			data-id={props.tileId}
-			data-row={props.row}
-			data-col={props.col}
+			className={props.tile.classList.join(" ")}
+			data-id={props.tile.tileId}
+			data-row={props.tile.row}
+			data-col={props.tile.col}
 			onClick={onClick}>
 			<p>{props.tileId}</p>
 		</div>
