@@ -18,7 +18,7 @@ function Tile(props) {
 			data-row={props.tile.row}
 			data-col={props.tile.col}
 			onClick={onClick}>
-			<p>{props.tileId}</p>
+			<p>{props.tile.tileId}</p>
 		</div>
 	);
 }
