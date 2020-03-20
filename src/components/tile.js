@@ -11,14 +11,17 @@ function Tile(props) {
 		});
 	};
 
+	const classNames = props.animate + " " + props.tile.type;
 	return (
 		<div
-			className={props.tile.type}
+			className={classNames}
 			data-id={props.tile.id}
 			data-row={props.tile.row}
 			data-col={props.tile.col}
 			onClick={onClick}>
-			<p>{props.tile.id}</p>
+			<img
+				src={props.tile.imgPath + "row-" + props.tile.row + "-col-" + props.tile.col + ".jpg"}
+				alt='tile'></img>
 		</div>
 	);
 }

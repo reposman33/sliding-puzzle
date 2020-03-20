@@ -5,6 +5,7 @@ import "./board.scss";
 const nrOfRows = 4;
 const colsPerRow = 4;
 const emptyTile = 0;
+const imgPath = "/assets/img/tiles/";
 const makeBoard = () => {
 	const board = [];
 	for (let row = 0; row < nrOfRows; row++) {
@@ -18,7 +19,8 @@ const makeBoard = () => {
 				row: row,
 				col: col,
 				type: type,
-				animate: ""
+				animate: "",
+				imgPath: imgPath
 			};
 		}
 	}
@@ -40,6 +42,7 @@ function Board() {
 			const newBoard = { ...boardState };
 			// update type of clicked tile
 			newBoard[tile.row][tile.col].type = "emptyTile";
+			newBoard[tile.row][tile.col].animation = move;
 			// update type of empty tile
 
 			if (move === "west") {
