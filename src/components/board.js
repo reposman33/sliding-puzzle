@@ -10,15 +10,15 @@ function Board() {
 	for (let row = 0; row < nrOfRows; row++) {
 		board[row] = {};
 		for (let col = 0; col < colsPerRow; col++) {
-			const tileId = row * colsPerRow + col;
-			const type = tileId === emptyTile ? "emptyTile" : "tile";
+			const id = row * colsPerRow + col;
+			const type = id === emptyTile ? "emptyTile" : "tile";
 
 			board[row][col] = {
-				tileId: tileId,
+				id: id,
 				row: row,
 				col: col,
-				classList: [type],
-				type: type
+				type: type,
+				animate: ""
 			};
 		}
 	}
@@ -30,9 +30,22 @@ function Board() {
 			return;
 		}
 		const move = determineMove(tile);
+
 		if (move) {
 			const newBoard = { ...boardState };
-			newBoard[tile.row][tile.col].classList.push(move);
+			// update type of clicked tile
+			newBoard[tile.row][tile.col].type = "emptyTile";
+			// update type of empty tile
+
+			if (move === "west") {
+				newBoard[tile.row][tile.col - 1].type = "tile";
+			} else if (move === "east") {
+				newBoard[tile.row][tile.col + 1].type = "tile";
+			} else if (move === "north") {
+				newBoard[tile.row - 1][tile.col].type = "tile";
+			} else if (move === "south") {
+				newBoard[tile.row + 1][tile.col].type = "tile";
+			}
 			setBoardState(newBoard);
 		}
 	};

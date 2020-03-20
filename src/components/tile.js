@@ -7,18 +7,18 @@ function Tile(props) {
 			type: props.tile.type,
 			row: props.tile.row,
 			col: props.tile.col,
-			tileId: props.tile.tileId
+			id: props.tile.id
 		});
 	};
 
 	return (
 		<div
-			className={props.tile.classList.join(" ")}
-			data-id={props.tile.tileId}
+			className={props.tile.type}
+			data-id={props.tile.id}
 			data-row={props.tile.row}
 			data-col={props.tile.col}
 			onClick={onClick}>
-			<p>{props.tile.tileId}</p>
+			<p>{props.tile.id}</p>
 		</div>
 	);
 }
