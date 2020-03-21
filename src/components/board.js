@@ -27,10 +27,8 @@ const makeBoard = () => {
 	return board;
 };
 
-const board = makeBoard();
-
 function Board() {
-	const [boardState, setBoardState] = useState(board);
+	const [boardState, setBoardState] = useState(makeBoard());
 
 	const onHandleClick = tile => {
 		if (tile.type === "emptyTile") {
@@ -39,33 +37,39 @@ function Board() {
 		const move = determineMove(tile);
 
 		if (move) {
-			const newBoard = { ...boardState };
-			// update type of clicked tile
-			newBoard[tile.row][tile.col].type = "emptyTile";
-			newBoard[tile.row][tile.col].animation = move;
-			// update type of empty tile
-
-			if (move === "west") {
-				newBoard[tile.row][tile.col - 1].type = "tile";
-			} else if (move === "east") {
-				newBoard[tile.row][tile.col + 1].type = "tile";
-			} else if (move === "north") {
-				newBoard[tile.row - 1][tile.col].type = "tile";
-			} else if (move === "south") {
-				newBoard[tile.row + 1][tile.col].type = "tile";
+			// clean state by removing existing animation values
+			const newBoardState = boardState.map(row => Object.keys(row).map(i => ({ ...row[i], animation: "" })));
+			// add animatin to clicked tile
+			newBoardState[tile.row][tile.col].animation = move;
+			// update type of emptytile
+			if (move === "west" && tile.col > 0) {
+				newBoardState[tile.row][tile.col - 1].type = "tile";
+			} else if (move === "east" && tile.col < colsPerRow) {
+				newBoardState[tile.row][tile.col + 1].type = "tile";
+			} else if (move === "north" && tile.row > 0) {
+				newBoardState[tile.row - 1][tile.col].type = "tile";
+			} else if (move === "south" && tile.row < nrOfRows) {
+				newBoardState[tile.row + 1][tile.col].type = "tile";
 			}
-			setBoardState(newBoard);
+			// location of clicked tile becomes location of empty tile
+			newBoardState[tile.row][tile.col].type = "emptyTile";
+
+			setBoardState(newBoardState);
 		}
 	};
 
 	const determineMove = tile =>
+		// is emptyTile above clicked tile?
 		tile.row > 0 && boardState[tile.row - 1][tile.col].type === "emptyTile"
 			? "north"
-			: tile.row < nrOfRows && boardState[tile.row + 1][tile.col].type === "emptyTile"
+			: // is emptyTile below clicked tile?
+			tile.row < nrOfRows - 1 && boardState[tile.row + 1][tile.col].type === "emptyTile"
 			? "south"
-			: tile.col > 0 && boardState[tile.row][tile.col - 1].type === "emptyTile"
+			: // is emptyTile left of clicked tile?
+			tile.col > 0 && boardState[tile.row][tile.col - 1].type === "emptyTile"
 			? "west"
-			: tile.row < colsPerRow && boardState[tile.row][tile.col + 1].type === "emptyTile"
+			: // is emptyTile right of clicked tile?
+			tile.col < colsPerRow - 1 && boardState[tile.row][tile.col + 1].type === "emptyTile"
 			? "east"
 			: undefined;
 
