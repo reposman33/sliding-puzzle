@@ -23,7 +23,7 @@ function Tile(props) {
 	if (props.tile.type === "tile") {
 		classNames.push("tile");
 	}
-	console.log(classNames);
+
 	return (
 		<div
 			className={classNames.join(" ")}
