@@ -4,77 +4,80 @@ import "./board.scss";
 
 const nrOfRows = 4;
 const colsPerRow = 4;
-const emptyTile = 0;
+const emptyTileIndex = 0;
 const imgPath = "/assets/img/tiles/";
-const makeBoard = () => {
-	const board = [];
-	for (let row = 0; row < nrOfRows; row++) {
-		board[row] = {};
-		for (let col = 0; col < colsPerRow; col++) {
-			const id = row * colsPerRow + col;
-			const type = id === emptyTile ? "emptyTile" : "tile";
 
-			board[row][col] = {
-				id: id,
-				row: row,
-				col: col,
-				type: type,
-				animate: "",
-				imgPath: imgPath
-			};
-		}
+// make the board that contains the tiles grid
+// @ return {object} - key:numeric, value:object {1:{}, 2:{},3(),...}
+const makeBoard = () => {
+	const board = {};
+	for (let i = 0; i < nrOfRows * colsPerRow; i++) {
+		board[i] = {
+			id: i,
+			display: i,
+			row: Math.floor(i / nrOfRows),
+			col: i % colsPerRow,
+			type: i === emptyTileIndex ? "emptyTile" : "tile",
+			animation: "",
+			imgPath: imgPath
+		};
 	}
 	return board;
 };
 
 function Board() {
+	// define state hook
 	const [boardState, setBoardState] = useState(makeBoard());
 
 	const onHandleClick = tile => {
+		// ignore clicks on the black square since it is not a tile
 		if (tile.type === "emptyTile") {
 			return;
 		}
-		const move = determineMove(tile);
 
-		if (move) {
-			// clean state by removing existing animation values
-			const newBoardState = boardState.map(row => Object.keys(row).map(i => ({ ...row[i], animation: "" })));
-			// add animatin to clicked tile
-			newBoardState[tile.row][tile.col].animation = move;
-			// update type of emptytile
-			if (move === "west" && tile.col > 0) {
-				newBoardState[tile.row][tile.col - 1].type = "tile";
-			} else if (move === "east" && tile.col < colsPerRow) {
-				newBoardState[tile.row][tile.col + 1].type = "tile";
-			} else if (move === "north" && tile.row > 0) {
-				newBoardState[tile.row - 1][tile.col].type = "tile";
-			} else if (move === "south" && tile.row < nrOfRows) {
-				newBoardState[tile.row + 1][tile.col].type = "tile";
-			}
-			// location of clicked tile becomes location of empty tile
-			newBoardState[tile.row][tile.col].type = "emptyTile";
+		// retrieve the emptytile from it's type value
+		const emptyTile = Object.values(boardState).filter(tile => tile.type === "emptyTile")[0];
+		// determine if the clicked tile can move and if so, where. possible values: north|south|east|west|undefined
+		const move = determineMove(tile, emptyTile);
+		// use an explicit boolean value instead of relying on undefined being false and a string being true
+		if (!!move) {
+			// clone state (#immutability!)
+			const newBoardState = { ...boardState };
 
+			//swap types of tiles so the clicked tile becomnes the empty tile and vice versa
+			[newBoardState[emptyTile.id].type, newBoardState[tile.id].type] = [
+				newBoardState[tile.id].type,
+				newBoardState[emptyTile.id].type
+			];
+			// swap display value of tiles so whatever is displayed in the tile (character) doesn't change
+			[emptyTile.display, tile.display] = [tile.display, emptyTile.display];
 			setBoardState(newBoardState);
 		}
 	};
 
-	const determineMove = tile =>
-		// is emptyTile above clicked tile?
-		tile.row > 0 && boardState[tile.row - 1][tile.col].type === "emptyTile"
+	const determineMove = (tile, emptyTile) =>
+		emptyTile.col === tile.col && tile.row - emptyTile.row === 1
 			? "north"
-			: // is emptyTile below clicked tile?
-			tile.row < nrOfRows - 1 && boardState[tile.row + 1][tile.col].type === "emptyTile"
+			: tile.col === emptyTile.col && tile.row - emptyTile.row === -1
 			? "south"
-			: // is emptyTile left of clicked tile?
-			tile.col > 0 && boardState[tile.row][tile.col - 1].type === "emptyTile"
+			: tile.row === emptyTile.row && tile.col - emptyTile.col === 1
 			? "west"
-			: // is emptyTile right of clicked tile?
-			tile.col < colsPerRow - 1 && boardState[tile.row][tile.col + 1].type === "emptyTile"
+			: tile.row === emptyTile.row && tile.col - emptyTile.col === -1
 			? "east"
 			: undefined;
 
-	const makeRows = () =>
-		Object.keys(boardState).map(i => <Row key={i} row={boardState[i]} onHandleClick={onHandleClick} />);
+	const makeRows = () => {
+		const rows = [];
+		Object.values(boardState).map((tile, i, arr) => {
+			if (i % colsPerRow === 0) {
+				// we have to group elements by 4 from an attay of 16 values
+				rows.push(<Row key={i} row={arr.slice(i, i + colsPerRow)} onHandleClick={onHandleClick} />);
+			}
+			return null;
+		});
+
+		return rows;
+	};
 
 	return <div className='board'>{makeRows()}</div>;
 }
