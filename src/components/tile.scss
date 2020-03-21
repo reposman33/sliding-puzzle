@@ -4,6 +4,7 @@
 	cursor: grabbing;
 	display: inline-block;
 	height: 95%;
+	position: relative;
 	width: 24%;
 
 	p {
@@ -16,4 +17,29 @@
 .emptyTile {
 	background-color: black;
 	width: 24%;
+}
+
+.west {
+	left: -124px;
+	transition-property: left;
+	transition-duration: 1s;
+	transition-timing-function: ease-in-out;
+}
+.east {
+	right: -125px;
+	transition-property: right;
+	transition-duration: 1s;
+	transition-timing-function: ease-in-out;
+}
+.north {
+	top: -125px;
+	transition-property: top;
+	transition-duration: 1s;
+	transition-timing-function: ease-in-out;
+}
+.south {
+	bottom: -124px;
+	transition-property: bottom;
+	transition-duration: 1s;
+	transition-timing-function: ease-in-out;
 }
