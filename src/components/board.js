@@ -42,7 +42,7 @@ function Board() {
 		// use an explicit boolean value instead of relying on undefined being false and a string being true
 		if (!!move) {
 			// clone state (#immutability!)
-			const newBoardState = { ...boardState };
+			const newBoardState = [...boardState];
 
 			//swap types of tiles so the clicked tile becomnes the empty tile and vice versa
 			[newBoardState[emptyTile.id].type, newBoardState[tile.id].type] = [
