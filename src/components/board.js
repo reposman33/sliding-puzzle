@@ -10,7 +10,7 @@ const imgPath = "/assets/img/tiles/";
 // make the board that contains the tiles grid
 // @ return {object} - key:numeric, value:object {1:{}, 2:{},3(),...}
 const makeBoard = () => {
-	const board = {};
+	const board = [];
 	for (let i = 0; i < nrOfRows * colsPerRow; i++) {
 		board[i] = {
 			id: i,
@@ -36,7 +36,7 @@ function Board() {
 		}
 
 		// retrieve the emptytile from it's type value
-		const emptyTile = Object.values(boardState).filter(tile => tile.type === "emptyTile")[0];
+		const emptyTile = boardState.filter(tile => tile.type === "emptyTile")[0];
 		// determine if the clicked tile can move and if so, where. possible values: north|south|east|west|undefined
 		const move = determineMove(tile, emptyTile);
 		// use an explicit boolean value instead of relying on undefined being false and a string being true
@@ -68,7 +68,7 @@ function Board() {
 
 	const makeRows = () => {
 		const rows = [];
-		Object.values(boardState).map((tile, i, arr) => {
+		boardState.map((tile, i, arr) => {
 			if (i % colsPerRow === 0) {
 				// we have to group elements by 4 from an attay of 16 values
 				rows.push(<Row key={i} row={arr.slice(i, i + colsPerRow)} onHandleClick={onHandleClick} />);
