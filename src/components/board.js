@@ -5,21 +5,21 @@ import "./board.scss";
 const nrOfRows = 4;
 const colsPerRow = 4;
 const emptyTileIndex = 0;
-const imgPath = "/assets/img/tiles/";
 
 // make the board that contains the tiles grid
 // @ return {object} - key:numeric, value:object {1:{}, 2:{},3(),...}
 const makeBoard = () => {
 	const board = [];
 	for (let i = 0; i < nrOfRows * colsPerRow; i++) {
+		const col = i % colsPerRow;
+		const row = Math.floor(i / nrOfRows);
 		board[i] = {
 			id: i,
-			display: i,
-			row: Math.floor(i / nrOfRows),
-			col: i % colsPerRow,
+			display: `/assets/img/tiles/row-${row}-col-${col}.jpg`,
+			row: row,
+			col: col,
 			type: i === emptyTileIndex ? "emptyTile" : "tile",
-			animation: "",
-			imgPath: imgPath
+			animation: ""
 		};
 	}
 	return board;
@@ -49,8 +49,11 @@ function Board() {
 				newBoardState[tile.id].type,
 				newBoardState[emptyTile.id].type
 			];
-			// swap display value of tiles so whatever is displayed in the tile (character) doesn't change
-			[emptyTile.display, tile.display] = [tile.display, emptyTile.display];
+			// swap display value of clicked tiles with emptytile
+			[newBoardState[emptyTile.id].display, newBoardState[tile.id].display] = [
+				newBoardState[tile.id].display,
+				newBoardState[emptyTile.id].display
+			];
 			setBoardState(newBoardState);
 		}
 	};
