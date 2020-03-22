@@ -7,31 +7,18 @@ function Tile(props) {
 			type: props.tile.type,
 			row: props.tile.row,
 			col: props.tile.col,
-			id: props.tile.id,
-			display: props.tile.display,
-			animation: props.tile.animation
+			id: props.tile.id
 		});
 	};
 
-	const classNames = [];
-	if (!!props.tile.animation) {
-		classNames.push(props.tile.animation);
-	}
-	if (props.tile.type === "emptyTile") {
-		classNames.push("emptyTile");
-	}
-	if (props.tile.type === "tile") {
-		classNames.push("tile");
-	}
-
 	return (
 		<div
-			className={classNames.join(" ")}
+			className={props.tile.type}
 			data-id={props.tile.id}
 			data-row={props.tile.row}
 			data-col={props.tile.col}
 			onClick={onClick}>
-			<p>{props.tile.display}</p>
+			<img src={props.tile.display} alt='' />
 		</div>
 	);
 }
