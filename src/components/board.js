@@ -3,7 +3,7 @@ import { Row } from "./row";
 import "./board.scss";
 
 const nrOfRows = 4;
-const colsPerRow = 4;
+const colsPerRow = 5;
 const emptyTileIndex = 0;
 
 // make the board that contains the tiles grid
@@ -15,7 +15,7 @@ const makeBoard = () => {
 		const row = Math.floor(i / nrOfRows);
 		board[i] = {
 			id: i,
-			display: `/assets/img/tiles/row-${row}-col-${col}.jpg`,
+			display: `/assets/img/tiles/sliced Amsterdam/row-${row}-col-${col}.jpg`,
 			row: row,
 			col: col,
 			type: i === emptyTileIndex ? "emptyTile" : "tile",
