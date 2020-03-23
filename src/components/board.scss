@@ -1,7 +1,7 @@
+// board dimensions equaL nrOfColummns * img width and nrOfRows * img height
 .board {
 	background-color: black;
 	flex-direction: column;
-	height: auto;
-	padding: 0;
-	width: auto;
+	height: calc(4 * 182px); // 4 rows of images each 180px high + 1px border top & bottom = 728px
+	width: calc(5 * 258px); // 5 columns of images each 256px high + 1px border left & right = 1290px
 }

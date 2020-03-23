@@ -1,18 +1,7 @@
 .tile {
-	background-color: #eeecdf;
-	border: 1px solid black;
+	border: 1px solid white;
 	cursor: grabbing;
-	display: inline-block;
-	height: 95%;
-	margin-top: -5px;
 	position: relative;
-	width: 24%;
-
-	p {
-		font-size: 3rem;
-		text-align: center;
-		line-height: 1rem;
-	}
 }
 
 .emptyTile {
