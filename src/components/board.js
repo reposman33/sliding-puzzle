@@ -18,8 +18,7 @@ const makeBoard = () => {
 			display: `/assets/img/tiles/sliced Amsterdam/row-${row}-col-${col}.jpg`,
 			row: row,
 			col: col,
-			type: i === emptyTileIndex ? "emptyTile" : "tile",
-			animation: ""
+			type: i === emptyTileIndex ? "emptyTile" : "tile"
 		};
 	}
 	return board;
