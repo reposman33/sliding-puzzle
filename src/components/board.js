@@ -12,7 +12,7 @@ const makeBoard = () => {
 	const board = [];
 	for (let i = 0; i < nrOfRows * colsPerRow; i++) {
 		const col = i % colsPerRow;
-		const row = Math.floor(i / nrOfRows);
+		const row = Math.floor(i / colsPerRow);
 		board[i] = {
 			id: i,
 			display: `/assets/img/tiles/sliced Amsterdam/row-${row}-col-${col}.jpg`,
