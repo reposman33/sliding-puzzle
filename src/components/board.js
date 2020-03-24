@@ -12,16 +12,21 @@ const ADAGIO_SCRAMBLESPEED = 500;
 const MODERATO_SCRAMBLESPEED = 350;
 const ALLEGRO_SCRAMBLESPEED = 200;
 
+const images = {
+	Worldmap: "/assets/img/tiles/sliced Map of Europe",
+	Amsterdam: "/assets/img/tiles/sliced Amsterdam"
+};
+
 // make the board that contains the tiles grid
 // @ return {object} - key:numeric, value:object {1:{}, 2:{},3(),...}
-const makeBoard = () => {
+const makeBoard = selectedImage => {
 	const board = [];
 	for (let i = 0; i < nrOfRows * nrOfCols; i++) {
 		const col = i % nrOfCols;
 		const row = Math.floor(i / nrOfCols);
 		board[i] = {
 			id: i,
-			display: `/assets/img/tiles/sliced Map of Europe/row-${row}-col-${col}.jpg`,
+			display: `${images[selectedImage]}/row-${row}-col-${col}.jpg`,
 			row: row,
 			col: col,
 			type: i === emptyTileIndex ? "emptyTile" : "tile",
@@ -33,7 +38,7 @@ const makeBoard = () => {
 
 function Board() {
 	// define state hook
-	const [boardState, setBoardState] = useState(makeBoard());
+	const [boardState, setBoardState] = useState(makeBoard("Worldmap"));
 
 	const onHandleClick = tile => {
 		// ignore clicks on the black square since it is not a tile
@@ -197,6 +202,7 @@ function Board() {
 
 	return (
 		<React.Fragment>
+			<span className='subHeader'></span>
 			<div className='board'>{makeRows()}</div>
 			<div>
 				<button onClick={() => onClickScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED)}>
@@ -208,6 +214,10 @@ function Board() {
 				<button onClick={() => onClickScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED)}>
 					Scramble like a Pro!
 				</button>
+			</div>
+			<div>
+				<button onClick={() => setBoardState(makeBoard("Amsterdam"))}>Amsterdam</button>
+				<button onClick={() => setBoardState(makeBoard("Worldmap"))}>Worldmap</button>
 			</div>
 		</React.Fragment>
 	);
