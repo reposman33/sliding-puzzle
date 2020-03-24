@@ -7,7 +7,7 @@ const nrOfCols = 5;
 const emptyTileIndex = 0;
 const BEGINNER_NROFSCRAMBLES = 25;
 const INTERMEDIATE_NROFSCRAMBLES = 50;
-const PRO_NROFSCRAMBLES = 15150 / 4.0;
+const PRO_NROFSCRAMBLES = 150;
 const ADAGIO_SCRAMBLESPEED = 500;
 const MODERATO_SCRAMBLESPEED = 350;
 const ALLEGRO_SCRAMBLESPEED = 200;
@@ -21,10 +21,11 @@ const makeBoard = () => {
 		const row = Math.floor(i / nrOfCols);
 		board[i] = {
 			id: i,
-			display: `/assets/img/tiles/sliced Amsterdam/row-${row}-col-${col}.jpg`,
+			display: `/assets/img/tiles/sliced Map of Europe/row-${row}-col-${col}.jpg`,
 			row: row,
 			col: col,
-			type: i === emptyTileIndex ? "emptyTile" : "tile"
+			type: i === emptyTileIndex ? "emptyTile" : "tile",
+			recentlyMoved: false
 		};
 	}
 	return board;
@@ -158,18 +159,32 @@ function Board() {
 		console.log("Follow the trailpath back!");
 
 		// Now we want to determine the available tiles given an emptyTile. We do that in an interval for a nice visual effect.
+		// clone boardstate because we need to change tile property recentlyMoved
+		const _boardState = [...boardState];
+
 		let intervalId = setInterval(() => {
 			// // - 3 - find the index of the current emptyTile
 			emptyTile = boardState.find(tile => tile.type === "emptyTile");
-			// - 4 - determine the emptyTileArea the emptyTile resides
+			// - 4 - determine the emptyTileArea the emptyTile resides in
 			emptyTilesArea = Object.keys(emptyTileAreas).find(key => emptyTileAreas[key].includes(emptyTile.id));
-			// - 5 - given te emptyTile index, determine the available tile indexes we can choose from
+			// - 5 - given the emptyTileArea, determine the available tile indexes we can shuffle
 			availableTiles = availableTileIndexes[emptyTilesArea](emptyTile.id);
-			// - 6 - pick a random tile index from the array of available tile indexes
+			// - 6 - filter any tile that has been moved the last time to prevent it from being shuffled back
+			availableTiles = availableTiles.filter(tileIndex => !_boardState[tileIndex].recentlyMoved);
+			// - 7 - pick a random tile index from the array of available tile indexes
 			randomTileIndex = availableTiles[Math.floor(Math.random() * availableTiles.length)];
-			// - 7 - do that thing you do!
-			onHandleClick(boardState[randomTileIndex]);
-			// some housekeeping to prevent this thing from running forever...
+			// reset all recentlyMovedProperties
+			_boardState.map(tile => (tile.recentlyMoved = false));
+			// - 8 -  Mark emptyTile as recentlyMoved. EmptyTile will swap and thus become the randomly selected tile
+			_boardState.map(tile => {
+				tile.type === "emptyTile" ? (tile.recentlyMoved = true) : (tile.recentlyMoved = false);
+				return tile;
+			});
+
+			// - 9 - do that thing you do!
+			onHandleClick(_boardState[randomTileIndex]);
+
+			// - 10 - some housekeeping to prevent this thing from running forever...
 			shuffleCount += 1;
 			// log output
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
