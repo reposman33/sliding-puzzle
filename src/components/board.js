@@ -15,6 +15,7 @@ const ALLEGRO_SCRAMBLESPEED = 200;
 // UI texts
 let displayMsg = "";
 const UITexts = {
+	HEADER_TEXT: { en: "Unscramble the puzzle!", nl: "Schuif de puzzel terug!" },
 	DISPLAYPROGRESSTEXT: { en: "Please wait... scrambling", nl: "Even wachten... husselen..." },
 	FINISHEDPROGRESSTEXT: { en: "Finished. Start unscrambling", nl: "Klaar Probeer de puzzel te maken" },
 	BUTTON_SCRAMBLE_LEVEL_1: { en: "Simple scramble", nl: "Beginnend puzzelaar" },
@@ -199,7 +200,8 @@ function Board() {
 
 			// create the UI message
 			shuffleCount++;
-			displayMsg = UITexts.DISPLAYPROGRESSTEXT[UIlanguage] + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
+			displayMsg =
+				UITexts.DISPLAYPROGRESSTEXT[UIlanguage] + " " + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
 			// when finished, display appropriate text
 			displayMsg = shuffleCount === nrOfMoves ? UITexts.FINISHEDPROGRESSTEXT[UIlanguage] : displayMsg;
 			// log output with a hint
@@ -217,31 +219,37 @@ function Board() {
 
 	return (
 		<React.Fragment>
-			<span className='subHeader'>{displayMsg}</span>
-			<div className='board'>{makeRows()}</div>
-			<div>
-				<button
-					onClick={() => {
-						onScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED);
-					}}>
-					{UITexts.BUTTON_SCRAMBLE_LEVEL_1[UIlanguage]}
-				</button>
-				<button
-					onClick={() => {
-						onScramble(INTERMEDIATE_NROFSCRAMBLES, MODERATO_SCRAMBLESPEED);
-					}}>
-					{UITexts.BUTTON_SCRAMBLE_LEVEL_2[UIlanguage]}
-				</button>
-				<button
-					onClick={() => {
-						onScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED);
-					}}>
-					{UITexts.BUTTON_SCRAMBLE_LEVEL_3[UIlanguage]}
-				</button>
-			</div>
-			<div>
-				<button onClick={() => setBoardState(makeBoard("Amsterdam"))}>Amsterdam</button>
-				<button onClick={() => setBoardState(makeBoard("Worldmap"))}>Worldmap</button>
+			<div className='container'>
+				<header className='header'>
+					<p>{UITexts.HEADER_TEXT[UIlanguage]}</p>
+				</header>
+
+				<span className='subHeader'>{displayMsg}</span>
+				<div className='board'>{makeRows()}</div>
+				<div>
+					<button
+						onClick={() => {
+							onScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED);
+						}}>
+						{UITexts.BUTTON_SCRAMBLE_LEVEL_1[UIlanguage]}
+					</button>
+					<button
+						onClick={() => {
+							onScramble(INTERMEDIATE_NROFSCRAMBLES, MODERATO_SCRAMBLESPEED);
+						}}>
+						{UITexts.BUTTON_SCRAMBLE_LEVEL_2[UIlanguage]}
+					</button>
+					<button
+						onClick={() => {
+							onScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED);
+						}}>
+						{UITexts.BUTTON_SCRAMBLE_LEVEL_3[UIlanguage]}
+					</button>
+				</div>
+				<div>
+					<button onClick={() => setBoardState(makeBoard("Amsterdam"))}>Amsterdam</button>
+					<button onClick={() => setBoardState(makeBoard("Worldmap"))}>Worldmap</button>
+				</div>
 			</div>
 		</React.Fragment>
 	);

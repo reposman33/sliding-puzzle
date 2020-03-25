@@ -1,13 +1,31 @@
-// board dimensions equaL nrOfColummns * img width and nrOfRows * img height
-.board {
-	background-color: black;
+.container {
+	display: flex;
 	flex-direction: column;
-	height: auto;
-	width: auto;
-	margin: 1rem;
-}
+	align-items: center;
 
-.subHeader {
-	font-size: 2rem;
-	min-height: 3rem;
+	& button {
+		background-color: blue;
+		cursor: pointer;
+		margin: 1rem;
+		color: white;
+		font-size: 2rem;
+		border-radius: 5px;
+		padding: 0.5rem 1rem;
+	}
+	& .header {
+		font-size: 3rem;
+	}
+
+	& .board {
+		background-color: black;
+		flex-direction: column;
+		height: auto;
+		width: auto;
+		margin: 1rem;
+	}
+
+	& .subHeader {
+		font-size: 2rem;
+		min-height: 3rem;
+	}
 }

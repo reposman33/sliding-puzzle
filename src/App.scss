@@ -1,18 +1,2 @@
 .App {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-
-	& button {
-		background-color: blue;
-		cursor: pointer;
-		margin: 1rem;
-		color: white;
-		font-size: 2rem;
-		border-radius: 5px;
-		padding: 0.5rem 1rem;
-	}
-	& .header {
-		font-size: 3rem;
-	}
 }
