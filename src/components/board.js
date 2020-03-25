@@ -20,7 +20,9 @@ const UITexts = {
 	FINISHEDPROGRESSTEXT: { en: "Finished. Start unscrambling", nl: "Klaar Probeer de puzzel te maken" },
 	BUTTON_SCRAMBLE_LEVEL_1: { en: "Simple scramble", nl: "Beginnend puzzelaar" },
 	BUTTON_SCRAMBLE_LEVEL_2: { en: "Intermediate scramble", nl: "Gevorderd puzzelaar" },
-	BUTTON_SCRAMBLE_LEVEL_3: { en: "Pro scramble", nl: "Professionele puzzelaar" }
+	BUTTON_SCRAMBLE_LEVEL_3: { en: "Pro scramble", nl: "Professionele puzzelaar" },
+	BUTTON_SELECT_IMAGE_AMSTERDAM: { en: "Amsterdam", nl: "Amsterdam" },
+	BUTTON_SELECT_IMAGE_WORLD: { en: "Worldmap", nl: "Wereldkaart" }
 };
 const UIlanguage = navigator.language.substr(0, 2);
 const images = {
@@ -247,8 +249,12 @@ function Board() {
 					</button>
 				</div>
 				<div>
-					<button onClick={() => setBoardState(makeBoard("Amsterdam"))}>Amsterdam</button>
-					<button onClick={() => setBoardState(makeBoard("Worldmap"))}>Worldmap</button>
+					<button onClick={() => setBoardState(makeBoard("Amsterdam"))}>
+						{UITexts.BUTTON_SELECT_IMAGE_AMSTERDAM[UIlanguage]}
+					</button>
+					<button onClick={() => setBoardState(makeBoard("Worldmap"))}>
+						{UITexts.BUTTON_SELECT_IMAGE_WORLD[UIlanguage]}
+					</button>
 				</div>
 			</div>
 		</React.Fragment>
