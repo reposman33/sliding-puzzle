@@ -14,12 +14,14 @@ const ALLEGRO_SCRAMBLESPEED = 200;
 
 // UI texts
 let displayMsg = "";
-const DISPLAYPROGRESSTEXT = "Even wachten... puzzel husselen...";
-const FINISHEDPROGRESSTEXT = "Klaar Probeer de puzzel te onttwarren";
-const BUTTON_SCRAMBLE_LEVEL_1 = "Beginner";
-const BUTTON_SCRAMBLE_LEVEL_2 = "Gevorderd";
-const BUTTON_SCRAMBLE_LEVEL_3 = "Pro";
-
+const UITexts = {
+	DISPLAYPROGRESSTEXT: { en: "Please wait... scrambling", nl: "Even wachten... husselen..." },
+	FINISHEDPROGRESSTEXT: { en: "Finished. Start unscrambling", nl: "Klaar Probeer de puzzel te maken" },
+	BUTTON_SCRAMBLE_LEVEL_1: { en: "Simple scramble", nl: "Beginnend puzzelaar" },
+	BUTTON_SCRAMBLE_LEVEL_2: { en: "Intermediate scramble", nl: "Gevorderd puzzelaar" },
+	BUTTON_SCRAMBLE_LEVEL_3: { en: "Pro scramble", nl: "Professionele puzzelaar" }
+};
+const UIlanguage = navigator.language.substr(0, 2);
 const images = {
 	Worldmap: "/assets/img/tiles/sliced Map of Europe",
 	Amsterdam: "/assets/img/tiles/sliced Amsterdam"
@@ -197,9 +199,9 @@ function Board() {
 
 			// create the UI message
 			shuffleCount++;
-			displayMsg = DISPLAYPROGRESSTEXT + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
+			displayMsg = UITexts.DISPLAYPROGRESSTEXT[UIlanguage] + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
 			// when finished, display appropriate text
-			displayMsg = shuffleCount === nrOfMoves ? FINISHEDPROGRESSTEXT : displayMsg;
+			displayMsg = shuffleCount === nrOfMoves ? UITexts.FINISHEDPROGRESSTEXT[UIlanguage] : displayMsg;
 			// log output with a hint
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
 
@@ -222,19 +224,19 @@ function Board() {
 					onClick={() => {
 						onScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED);
 					}}>
-					{BUTTON_SCRAMBLE_LEVEL_1}
+					{UITexts.BUTTON_SCRAMBLE_LEVEL_1[UIlanguage]}
 				</button>
 				<button
 					onClick={() => {
 						onScramble(INTERMEDIATE_NROFSCRAMBLES, MODERATO_SCRAMBLESPEED);
 					}}>
-					{BUTTON_SCRAMBLE_LEVEL_2}
+					{UITexts.BUTTON_SCRAMBLE_LEVEL_2[UIlanguage]}
 				</button>
 				<button
 					onClick={() => {
 						onScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED);
 					}}>
-					{BUTTON_SCRAMBLE_LEVEL_3}
+					{UITexts.BUTTON_SCRAMBLE_LEVEL_3[UIlanguage]}
 				</button>
 			</div>
 			<div>
