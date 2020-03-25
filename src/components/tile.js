@@ -18,7 +18,7 @@ function Tile(props) {
 			data-row={props.tile.row}
 			data-col={props.tile.col}
 			onClick={onClick}>
-			<img src={props.tile.display} alt='Tiled image' />
+			<img src={props.tile.display} alt='Tile' />
 			{/* <p>{props.tile.display}</p> */}
 		</div>
 	);
