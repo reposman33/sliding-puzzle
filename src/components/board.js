@@ -12,6 +12,14 @@ const ADAGIO_SCRAMBLESPEED = 500;
 const MODERATO_SCRAMBLESPEED = 350;
 const ALLEGRO_SCRAMBLESPEED = 200;
 
+// UI texts
+let displayMsg = "";
+const DISPLAYPROGRESSTEXT = "Even wachten... puzzel husselen...";
+const FINISHEDPROGRESSTEXT = "Klaar Probeer de puzzel te onttwarren";
+const BUTTON_SCRAMBLE_LEVEL_1 = "Beginner";
+const BUTTON_SCRAMBLE_LEVEL_2 = "Gevorderd";
+const BUTTON_SCRAMBLE_LEVEL_3 = "Pro";
+
 const images = {
 	Worldmap: "/assets/img/tiles/sliced Map of Europe",
 	Amsterdam: "/assets/img/tiles/sliced Amsterdam"
@@ -45,7 +53,6 @@ function Board() {
 		if (tile.type === "emptyTile") {
 			return;
 		}
-
 		// retrieve the emptytile from it's type value
 		const emptyTile = boardState.filter(tile => tile.type === "emptyTile")[0];
 		// determine if the clicked tile can move and if so, where. possible values: north|south|east|west|undefined
@@ -84,14 +91,12 @@ function Board() {
 		const rows = [];
 		boardState.map((tile, i, arr) => {
 			if (i % nrOfCols === 0) {
-				// we have to group elements by 4 from an attay of 16 values
+				// we have to group elements by 4 from an array of 16 values
 				rows.push(<Row key={i} row={arr.slice(i, i + nrOfCols)} onHandleClick={onHandleClick} />);
 			}
 		});
 		return rows;
 	};
-
-	const onClickScramble = (nrOfMoves, scrambleSpeed) => onScramble(nrOfMoves, scrambleSpeed);
 
 	const onScramble = (nrOfMoves, scrambleSpeed) => {
 		// How does this work?
@@ -159,6 +164,7 @@ function Board() {
 		let emptyTilesArea;
 		let availableTiles;
 		let randomTileIndex;
+
 		let shuffleCount = 0;
 
 		console.log("Follow the trailpath back!");
@@ -189,30 +195,46 @@ function Board() {
 			// - 9 - do that thing you do!
 			onHandleClick(_boardState[randomTileIndex]);
 
-			// - 10 - some housekeeping to prevent this thing from running forever...
-			shuffleCount += 1;
-			// log output
+			// create the UI message
+			shuffleCount++;
+			displayMsg = DISPLAYPROGRESSTEXT + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
+			// when finished, display appropriate text
+			displayMsg = shuffleCount === nrOfMoves ? FINISHEDPROGRESSTEXT : displayMsg;
+			// log output with a hint
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
-			if (shuffleCount === nrOfMoves) {
+
+			// - 10 - some housekeeping to prevent this thing from running forever...
+			if (shuffleCount === nrOfMoves + 1) {
 				clearInterval(intervalId);
-				console.log("End of path");
+				// setting this has result as soon as user clicks tile and component is rendered again
+				displayMsg = "";
+				console.log("End of path. Follow the breadcrumbs back ;)");
 			}
 		}, scrambleSpeed);
 	};
 
 	return (
 		<React.Fragment>
-			<span className='subHeader'></span>
+			<span className='subHeader'>{displayMsg}</span>
 			<div className='board'>{makeRows()}</div>
 			<div>
-				<button onClick={() => onClickScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED)}>
-					Simple scramble
+				<button
+					onClick={() => {
+						onScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED);
+					}}>
+					{BUTTON_SCRAMBLE_LEVEL_1}
 				</button>
-				<button onClick={() => onClickScramble(INTERMEDIATE_NROFSCRAMBLES, MODERATO_SCRAMBLESPEED)}>
-					Intermediate scramble
+				<button
+					onClick={() => {
+						onScramble(INTERMEDIATE_NROFSCRAMBLES, MODERATO_SCRAMBLESPEED);
+					}}>
+					{BUTTON_SCRAMBLE_LEVEL_2}
 				</button>
-				<button onClick={() => onClickScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED)}>
-					Scramble like a Pro!
+				<button
+					onClick={() => {
+						onScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED);
+					}}>
+					{BUTTON_SCRAMBLE_LEVEL_3}
 				</button>
 			</div>
 			<div>
