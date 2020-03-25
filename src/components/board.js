@@ -24,7 +24,7 @@ const UITexts = {
 	BUTTON_SELECT_IMAGE_AMSTERDAM: { en: "Amsterdam", nl: "Amsterdam" },
 	BUTTON_SELECT_IMAGE_WORLD: { en: "Worldmap", nl: "Wereldkaart" }
 };
-const UIlanguage = navigator.language.substr(0, 2);
+const defaultLanguage = "nl";
 const images = {
 	Worldmap: "/assets/img/tiles/sliced Map of Europe",
 	Amsterdam: "/assets/img/tiles/sliced Amsterdam"
@@ -53,6 +53,12 @@ function Board() {
 	// define state hook
 	const [boardState, setBoardState] = useState(makeBoard("Worldmap"));
 
+	const I18n = token => {
+		console.log(token);
+		return UITexts[token].hasOwnProperty(navigator.language.substr(0, 2))
+			? UITexts[token][navigator.language.substr(0, 2)]
+			: UITexts[token][defaultLanguage];
+	};
 	const onHandleClick = tile => {
 		// ignore clicks on the black square since it is not a tile
 		if (tile.type === "emptyTile") {
@@ -99,6 +105,7 @@ function Board() {
 				// we have to group elements by 4 from an array of 16 values
 				rows.push(<Row key={i} row={arr.slice(i, i + nrOfCols)} onHandleClick={onHandleClick} />);
 			}
+			return null;
 		});
 		return rows;
 	};
@@ -202,10 +209,9 @@ function Board() {
 
 			// create the UI message
 			shuffleCount++;
-			displayMsg =
-				UITexts.DISPLAYPROGRESSTEXT[UIlanguage] + " " + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
+			displayMsg = I18n("DISPLAYPROGRESSTEXT") + " " + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
 			// when finished, display appropriate text
-			displayMsg = shuffleCount === nrOfMoves ? UITexts.FINISHEDPROGRESSTEXT[UIlanguage] : displayMsg;
+			displayMsg = shuffleCount === nrOfMoves ? I18n("FINISHEDPROGRESSTEXT") : displayMsg;
 			// log output with a hint
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
 
@@ -223,7 +229,7 @@ function Board() {
 		<React.Fragment>
 			<div className='container'>
 				<header className='header'>
-					<p>{UITexts.HEADER_TEXT[UIlanguage]}</p>
+					<p>{I18n("HEADER_TEXT")}</p>
 				</header>
 
 				<span className='subHeader'>{displayMsg}</span>
@@ -233,27 +239,27 @@ function Board() {
 						onClick={() => {
 							onScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED);
 						}}>
-						{UITexts.BUTTON_SCRAMBLE_LEVEL_1[UIlanguage]}
+						{I18n("BUTTON_SCRAMBLE_LEVEL_1")}
 					</button>
 					<button
 						onClick={() => {
 							onScramble(INTERMEDIATE_NROFSCRAMBLES, MODERATO_SCRAMBLESPEED);
 						}}>
-						{UITexts.BUTTON_SCRAMBLE_LEVEL_2[UIlanguage]}
+						{I18n("BUTTON_SCRAMBLE_LEVEL_2")}
 					</button>
 					<button
 						onClick={() => {
 							onScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED);
 						}}>
-						{UITexts.BUTTON_SCRAMBLE_LEVEL_3[UIlanguage]}
+						{I18n("BUTTON_SCRAMBLE_LEVEL_3")}
 					</button>
 				</div>
 				<div>
 					<button onClick={() => setBoardState(makeBoard("Amsterdam"))}>
-						{UITexts.BUTTON_SELECT_IMAGE_AMSTERDAM[UIlanguage]}
+						{I18n("BUTTON_SELECT_IMAGE_AMSTERDAM")}
 					</button>
 					<button onClick={() => setBoardState(makeBoard("Worldmap"))}>
-						{UITexts.BUTTON_SELECT_IMAGE_WORLD[UIlanguage]}
+						{I18n("BUTTON_SELECT_IMAGE_WORLD")}
 					</button>
 				</div>
 			</div>
