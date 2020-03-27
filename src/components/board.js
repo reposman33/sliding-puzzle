@@ -54,7 +54,6 @@ function Board() {
 	const [boardState, setBoardState] = useState(makeBoard("Worldmap"));
 
 	const I18n = token => {
-		console.log(token);
 		return UITexts[token].hasOwnProperty(navigator.language.substr(0, 2))
 			? UITexts[token][navigator.language.substr(0, 2)]
 			: UITexts[token][defaultLanguage];
@@ -111,100 +110,34 @@ function Board() {
 	};
 
 	const onScramble = (nrOfMoves, scrambleSpeed) => {
-		// How does this work?
-		// We need to identify of locations of emptyTiles where neighbouring tiles can be determined in the same manner. So when the emptyTile is in the top-left corner all availableTiles can be reached by adding 1 or the number of columns; When the emptytile is in the top row (excluding the topLeft and topRight corners) all available tiles can be determined by either adding -1, +1 or nrOfColumns to the emptyTile.
-		// - 1 - specify emptyTile locations that have neighbouring tiles that can be detrmined by the same calculation
-		const emptyTileAreas = {};
-		emptyTileAreas.topLeftEmptyTileIndex = [0];
-		emptyTileAreas.topRightEmptyTileIndex = [nrOfCols - 1];
-		emptyTileAreas.bottomLeftEmptyTileIndex = [nrOfCols * nrOfRows - nrOfCols];
-		emptyTileAreas.bottomRightEmptyTileIndex = [nrOfCols * nrOfRows - 1];
-		emptyTileAreas.topBorderColumnEmptyTileIndexes = [];
-		for (let col = 1; col < nrOfCols - 1; col++) {
-			emptyTileAreas.topBorderColumnEmptyTileIndexes.push(col);
-		}
-		emptyTileAreas.bottomBorderColumnEmptyTileIndexes = [];
-		for (let col = 1; col < nrOfCols - 1; col++) {
-			emptyTileAreas.bottomBorderColumnEmptyTileIndexes.push((nrOfRows - 1) * nrOfCols + col);
-		}
-		emptyTileAreas.leftBorderColumnEmptyTileIndexes = [];
-		emptyTileAreas.rightBorderColumnEmptyTileIndexes = [];
-		emptyTileAreas.midBoardEmptyTileIndexes = [];
-		for (let row = 1; row < nrOfRows - 1; row++) {
-			emptyTileAreas.leftBorderColumnEmptyTileIndexes.push(row * nrOfCols);
-			emptyTileAreas.rightBorderColumnEmptyTileIndexes.push(row * nrOfCols + nrOfCols - 1);
-			for (let col = 1; col < nrOfCols - 1; col++) {
-				emptyTileAreas.midBoardEmptyTileIndexes.push(row * nrOfCols + col);
-			}
-		}
-		// For each of these 9 areas we want to determine how to calculate the availble tiles. The availableTile index depends on the emptyTile index. To keep it simple the keyvalue is a function that accepts the emptyTile index and returns an array of availableTile indexes.
-		// - 2 - specify the indexes of available tiles for each collection of emptyTiles
-		const availableTileIndexes = {
-			topLeftEmptyTileIndex: emptyTileIndex => [emptyTileIndex + 1, emptyTileIndex + nrOfCols],
-			topRightEmptyTileIndex: emptyTileIndex => [emptyTileIndex - 1, emptyTileIndex + nrOfCols],
-			bottomLeftEmptyTileIndex: emptyTileIndex => [emptyTileIndex + 1, emptyTileIndex - nrOfCols],
-			bottomRightEmptyTileIndex: emptyTileIndex => [emptyTileIndex - 1, emptyTileIndex - nrOfCols],
-			topBorderColumnEmptyTileIndexes: emptyTileIndex => [
-				emptyTileIndex - 1,
-				emptyTileIndex + nrOfCols,
-				emptyTileIndex + 1
-			],
-			bottomBorderColumnEmptyTileIndexes: emptyTileIndex => [
-				emptyTileIndex - 1,
-				emptyTileIndex - nrOfCols,
-				emptyTileIndex + 1
-			],
-
-			leftBorderColumnEmptyTileIndexes: emptyTileIndex => [
-				emptyTileIndex - nrOfCols,
-				emptyTileIndex + 1,
-				emptyTileIndex + nrOfCols
-			],
-			rightBorderColumnEmptyTileIndexes: emptyTileIndex => [
-				emptyTileIndex - nrOfCols,
-				emptyTileIndex - 1,
-				emptyTileIndex + nrOfCols
-			],
-			midBoardEmptyTileIndexes: emptyTileIndex => [
-				emptyTileIndex - nrOfCols,
-				emptyTileIndex + 1,
-				emptyTileIndex + nrOfCols,
-				emptyTileIndex - 1
-			]
-		};
 		let emptyTile;
-		let emptyTilesArea;
-		let availableTiles;
+		let availableTiles = [];
 		let randomTileIndex;
-
 		let shuffleCount = 0;
 
 		console.log("Follow the trailpath back!");
 
-		// Now we want to determine the available tiles given an emptyTile. We do that in an interval for a nice visual effect.
 		// clone boardstate because we need to change tile property recentlyMoved
 		const _boardState = [...boardState];
 
 		let intervalId = setInterval(() => {
-			// // - 3 - find the index of the current emptyTile
+			// find the index of the current emptyTile
+			availableTiles = [];
 			emptyTile = boardState.find(tile => tile.type === "emptyTile");
-			// - 4 - determine the emptyTileArea the emptyTile resides in
-			emptyTilesArea = Object.keys(emptyTileAreas).find(key => emptyTileAreas[key].includes(emptyTile.id));
-			// - 5 - given the emptyTileArea, determine the available tile indexes we can shuffle
-			availableTiles = availableTileIndexes[emptyTilesArea](emptyTile.id);
-			// - 6 - filter any tile that has been moved the last time to prevent it from being shuffled back
+			// determine tiles surroundking the empty tile we can swap
+			emptyTile.col - 1 > -1 && availableTiles.push(emptyTile.id - 1);
+			emptyTile.col + 1 < nrOfCols && availableTiles.push(emptyTile.id + 1);
+			emptyTile.row - 1 > -1 && availableTiles.push(emptyTile.id - nrOfCols);
+			emptyTile.row + 1 < nrOfRows && availableTiles.push(emptyTile.id + nrOfCols);
+			// filter any tile that has been moved the last time to prevent it from being shuffled back
 			availableTiles = availableTiles.filter(tileIndex => !_boardState[tileIndex].recentlyMoved);
-			// - 7 - pick a random tile index from the array of available tile indexes
+			// pick a random tile index from the array of available tile indexes
 			randomTileIndex = availableTiles[Math.floor(Math.random() * availableTiles.length)];
 			// reset all recentlyMovedProperties
 			_boardState.map(tile => (tile.recentlyMoved = false));
-			// - 8 -  Mark emptyTile as recentlyMoved. EmptyTile will swap and thus become the randomly selected tile
-			_boardState.map(tile => {
-				tile.type === "emptyTile" ? (tile.recentlyMoved = true) : (tile.recentlyMoved = false);
-				return tile;
-			});
-
-			// - 9 - do that thing you do!
+			// mark emptyTile as recentlyMoved. EmptyTile will swap and thus become the randomly selected tile
+			_boardState[emptyTile.id].recentlyMoved = true;
+			// swap tiles!
 			onHandleClick(_boardState[randomTileIndex]);
 
 			// create the UI message
@@ -215,7 +148,7 @@ function Board() {
 			// log output with a hint
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
 
-			// - 10 - some housekeeping to prevent this thing from running forever...
+			// some housekeeping to prevent this thing from running forever...
 			if (shuffleCount === nrOfMoves + 1) {
 				clearInterval(intervalId);
 				// setting this has result as soon as user clicks tile and component is rendered again
