@@ -8,6 +8,7 @@ import "./board.scss";
 const nrOfRows = 4;
 const nrOfCols = 5;
 const emptyTileIndex = 0;
+let moveCount = 0;
 const headerReferences = {};
 const BEGINNER_NROFSCRAMBLES = 25;
 const INTERMEDIATE_NROFSCRAMBLES = 50;
@@ -70,6 +71,7 @@ function Board() {
 				newBoardState[tile.id].display,
 				newBoardState[emptyTile.id].display
 			];
+			headerReferences.updateMoveCount(++moveCount);
 			setBoardState(newBoardState);
 			headerReferences.updateHeaderText(I18n.get("SUBHEADER_TEXT"));
 		}
@@ -77,6 +79,7 @@ function Board() {
 
 	const updateHeaderReference = refs => {
 		headerReferences.updateHeaderText = refs.updateHeaderText;
+		headerReferences.updateMoveCount = refs.updateMoveCount;
 	};
 
 	const determineMove = (tile, emptyTile) =>
@@ -154,7 +157,7 @@ function Board() {
 	return (
 		<React.Fragment>
 			<div className='container'>
-				<Header updateHeaderReference={updateHeaderReference} />
+				<Header updateHeaderReference={updateHeaderReference} moveCount={0} />
 
 				<span className='subHeader'>{displayMsg}</span>
 				<div className='board'>{makeRows()}</div>
