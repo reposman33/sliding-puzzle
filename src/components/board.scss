@@ -13,9 +13,6 @@
 		margin: 1rem;
 		padding: 0.5rem 1rem;
 	}
-	& .header {
-		font-size: 3rem;
-	}
 
 	& .board {
 		background-color: transparent;
@@ -25,10 +22,5 @@
 		height: auto;
 		width: auto;
 		margin: 1rem;
-	}
-
-	& .subHeader {
-		font-size: 2rem;
-		min-height: 3rem;
 	}
 }

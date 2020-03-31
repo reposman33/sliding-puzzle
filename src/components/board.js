@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Row } from "./row";
+import { Header } from "./header";
+import { I18n } from "../Services/I18n";
+
 import "./board.scss";
 
 const nrOfRows = 4;
 const nrOfCols = 5;
 const emptyTileIndex = 0;
+const headerReferences = {};
 const BEGINNER_NROFSCRAMBLES = 25;
 const INTERMEDIATE_NROFSCRAMBLES = 50;
 const PRO_NROFSCRAMBLES = 150;
@@ -14,17 +18,6 @@ const ALLEGRO_SCRAMBLESPEED = 200;
 
 // UI texts
 let displayMsg = "";
-const UITexts = {
-	HEADER_TEXT: { en: "Unscramble the puzzle!", nl: "Schuif de puzzel terug!" },
-	DISPLAYPROGRESSTEXT: { en: "Please wait... scrambling", nl: "Even wachten... husselen..." },
-	FINISHEDPROGRESSTEXT: { en: "Finished. Start unscrambling", nl: "Klaar Probeer de puzzel te maken" },
-	BUTTON_SCRAMBLE_LEVEL_1: { en: "Simple scramble", nl: "Beginnend puzzelaar" },
-	BUTTON_SCRAMBLE_LEVEL_2: { en: "Intermediate scramble", nl: "Gevorderd puzzelaar" },
-	BUTTON_SCRAMBLE_LEVEL_3: { en: "Pro scramble", nl: "Professionele puzzelaar" },
-	BUTTON_SELECT_IMAGE_AMSTERDAM: { en: "Amsterdam", nl: "Amsterdam" },
-	BUTTON_SELECT_IMAGE_WORLD: { en: "Worldmap", nl: "Wereldkaart" }
-};
-const defaultLanguage = "nl";
 const images = {
 	Worldmap: "/assets/img/tiles/sliced Map of Europe",
 	Amsterdam: "/assets/img/tiles/sliced Amsterdam"
@@ -53,11 +46,6 @@ function Board() {
 	// define state hook
 	const [boardState, setBoardState] = useState(makeBoard("Worldmap"));
 
-	const I18n = token => {
-		return UITexts[token].hasOwnProperty(navigator.language.substr(0, 2))
-			? UITexts[token][navigator.language.substr(0, 2)]
-			: UITexts[token][defaultLanguage];
-	};
 	const onHandleClick = tile => {
 		// ignore clicks on the black square since it is not a tile
 		if (tile.type === "emptyTile") {
@@ -83,7 +71,12 @@ function Board() {
 				newBoardState[emptyTile.id].display
 			];
 			setBoardState(newBoardState);
+			headerReferences.updateHeaderText(I18n.get("SUBHEADER_TEXT"));
 		}
+	};
+
+	const updateHeaderReference = refs => {
+		headerReferences.updateHeaderText = refs.updateHeaderText;
 	};
 
 	const determineMove = (tile, emptyTile) =>
@@ -142,9 +135,9 @@ function Board() {
 
 			// create the UI message
 			shuffleCount++;
-			displayMsg = I18n("DISPLAYPROGRESSTEXT") + " " + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
+			displayMsg = I18n.get("DISPLAYPROGRESSTEXT") + " " + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
 			// when finished, display appropriate text
-			displayMsg = shuffleCount === nrOfMoves ? I18n("FINISHEDPROGRESSTEXT") : displayMsg;
+			displayMsg = shuffleCount === nrOfMoves ? I18n.get("FINISHEDPROGRESSTEXT") : displayMsg;
 			// log output with a hint
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
 
@@ -161,9 +154,7 @@ function Board() {
 	return (
 		<React.Fragment>
 			<div className='container'>
-				<header className='header'>
-					<p>{I18n("HEADER_TEXT")}</p>
-				</header>
+				<Header updateHeaderReference={updateHeaderReference} />
 
 				<span className='subHeader'>{displayMsg}</span>
 				<div className='board'>{makeRows()}</div>
@@ -172,27 +163,27 @@ function Board() {
 						onClick={() => {
 							onScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED);
 						}}>
-						{I18n("BUTTON_SCRAMBLE_LEVEL_1")}
+						{I18n.get("BUTTON_SCRAMBLE_LEVEL_1")}
 					</button>
 					<button
 						onClick={() => {
 							onScramble(INTERMEDIATE_NROFSCRAMBLES, MODERATO_SCRAMBLESPEED);
 						}}>
-						{I18n("BUTTON_SCRAMBLE_LEVEL_2")}
+						{I18n.get("BUTTON_SCRAMBLE_LEVEL_2")}
 					</button>
 					<button
 						onClick={() => {
 							onScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED);
 						}}>
-						{I18n("BUTTON_SCRAMBLE_LEVEL_3")}
+						{I18n.get("BUTTON_SCRAMBLE_LEVEL_3")}
 					</button>
 				</div>
 				<div>
 					<button onClick={() => setBoardState(makeBoard("Amsterdam"))}>
-						{I18n("BUTTON_SELECT_IMAGE_AMSTERDAM")}
+						{I18n.get("BUTTON_SELECT_IMAGE_AMSTERDAM")}
 					</button>
 					<button onClick={() => setBoardState(makeBoard("Worldmap"))}>
-						{I18n("BUTTON_SELECT_IMAGE_WORLD")}
+						{I18n.get("BUTTON_SELECT_IMAGE_WORLD")}
 					</button>
 				</div>
 			</div>
