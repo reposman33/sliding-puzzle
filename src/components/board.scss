@@ -5,11 +5,12 @@
 
 	& button {
 		background-color: blue;
-		cursor: pointer;
-		margin: 1rem;
+		border-radius: 10px;
+		box-shadow: 5px 5px 15px 5px #ccc;
 		color: white;
+		cursor: pointer;
 		font-size: 2rem;
-		border-radius: 5px;
+		margin: 1rem;
 		padding: 0.5rem 1rem;
 	}
 	& .header {
@@ -17,7 +18,9 @@
 	}
 
 	& .board {
-		background-color: black;
+		background-color: transparent;
+		border-radius: 10px;
+		box-shadow: 0 0 30px 5px #ccc;
 		flex-direction: column;
 		height: auto;
 		width: auto;
