@@ -47,7 +47,7 @@ function Board() {
 	// define state hook
 	const [boardState, setBoardState] = useState(makeBoard("Worldmap"));
 
-	const onHandleClick = tile => {
+	const onHandleClick = (tile, displayMoveCount = true) => {
 		// ignore clicks on the black square since it is not a tile
 		if (tile.type === "emptyTile") {
 			return;
@@ -71,9 +71,9 @@ function Board() {
 				newBoardState[tile.id].display,
 				newBoardState[emptyTile.id].display
 			];
-			headerReferences.updateMoveCount(++moveCount);
+			displayMoveCount && headerReferences.updateMoveCount(++moveCount);
 			setBoardState(newBoardState);
-			headerReferences.updateHeaderText(I18n.get("SUBHEADER_TEXT"));
+			displayMoveCount && headerReferences.updateHeaderText(I18n.get("SUBHEADER_TEXT"));
 		}
 	};
 
@@ -143,7 +143,7 @@ function Board() {
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
 
 			// swap tiles!
-			onHandleClick(_boardState[randomTileIndex]);
+			onHandleClick(_boardState[randomTileIndex], false);
 
 			// some housekeeping to prevent this thing from running forever...
 			if (shuffleCount === nrOfMoves) {
