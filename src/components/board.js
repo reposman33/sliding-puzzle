@@ -104,7 +104,7 @@ function Board() {
 		// clone boardstate because we need to change tile property recentlyMoved
 		const _boardState = [...boardState];
 
-		let intervalId = setInterval(() => {
+		for (let move = 0; move < nrOfMoves; move++) {
 			// find the index of the current emptyTile
 			availableTiles = [];
 			emptyTile = boardState.find(tile => tile.type === "emptyTile");
@@ -132,15 +132,11 @@ function Board() {
 
 			// swap tiles!
 			onHandleClick(_boardState[randomTileIndex], false);
-
-			// some housekeeping to prevent this thing from running forever...
-			if (shuffleCount === nrOfMoves) {
-				clearInterval(intervalId);
-				// setting this has result as soon as user clicks tile and component is rendered again
-				displayMsg = "";
-				console.log("End of path. Follow the breadcrumbs back ;)");
-			}
-		}, scrambleSpeed);
+		}
+		// some housekeeping to prevent this thing from running forever...
+		// setting this has result as soon as user clicks tile and component is rendered again
+		displayMsg = "";
+		console.log("End of path. Follow the breadcrumbs back ;)");
 	};
 
 	return (
