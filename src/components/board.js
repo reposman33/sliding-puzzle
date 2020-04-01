@@ -133,15 +133,17 @@ function Board() {
 			_boardState.map(tile => (tile.recentlyMoved = false));
 			// mark emptyTile as recentlyMoved. EmptyTile will swap and thus become the randomly selected tile
 			_boardState[emptyTile.id].recentlyMoved = true;
-			// swap tiles!
-			onHandleClick(_boardState[randomTileIndex]);
 
 			// create the UI message
-			displayMsg = I18n.get("DISPLAYPROGRESSTEXT") + " " + Math.floor((++shuffleCount / nrOfMoves) * 100) + "%";
+			shuffleCount += 1;
+			displayMsg = I18n.get("DISPLAYPROGRESSTEXT") + " " + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
 			// when finished, display appropriate text
 			displayMsg = shuffleCount === nrOfMoves ? I18n.get("FINISHEDPROGRESSTEXT") : displayMsg;
 			// log output with a hint
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
+
+			// swap tiles!
+			onHandleClick(_boardState[randomTileIndex]);
 
 			// some housekeeping to prevent this thing from running forever...
 			if (shuffleCount === nrOfMoves) {
