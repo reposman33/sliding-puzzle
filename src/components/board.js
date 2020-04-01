@@ -120,7 +120,7 @@ function Board() {
 			// find the index of the current emptyTile
 			availableTiles = [];
 			emptyTile = boardState.find(tile => tile.type === "emptyTile");
-			// determine tiles surroundking the empty tile we can swap
+			// determine tiles surrounding the empty tile we can swap
 			emptyTile.col - 1 > -1 && availableTiles.push(emptyTile.id - 1);
 			emptyTile.col + 1 < nrOfCols && availableTiles.push(emptyTile.id + 1);
 			emptyTile.row - 1 > -1 && availableTiles.push(emptyTile.id - nrOfCols);
@@ -137,15 +137,14 @@ function Board() {
 			onHandleClick(_boardState[randomTileIndex]);
 
 			// create the UI message
-			shuffleCount++;
-			displayMsg = I18n.get("DISPLAYPROGRESSTEXT") + " " + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
+			displayMsg = I18n.get("DISPLAYPROGRESSTEXT") + " " + Math.floor((++shuffleCount / nrOfMoves) * 100) + "%";
 			// when finished, display appropriate text
 			displayMsg = shuffleCount === nrOfMoves ? I18n.get("FINISHEDPROGRESSTEXT") : displayMsg;
 			// log output with a hint
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
 
 			// some housekeeping to prevent this thing from running forever...
-			if (shuffleCount === nrOfMoves + 1) {
+			if (shuffleCount === nrOfMoves) {
 				clearInterval(intervalId);
 				// setting this has result as soon as user clicks tile and component is rendered again
 				displayMsg = "";
