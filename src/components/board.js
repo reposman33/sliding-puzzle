@@ -9,8 +9,6 @@ import "./board.scss";
 const nrOfRows = 4;
 const nrOfCols = 5;
 const emptyTileIndex = 0;
-let moveCount = 0;
-const headerReferences = {};
 
 // UI texts
 let displayMsg = "";
@@ -41,6 +39,7 @@ const makeBoard = selectedImage => {
 function Board() {
 	// define state hook
 	const [boardState, setBoardState] = useState(makeBoard("Worldmap"));
+	const [moveCount, setMoveCount] = useState(0);
 
 	const onHandleClick = (tile, displayMoveCount = true) => {
 		// ignore clicks on the black square since it is not a tile
@@ -66,15 +65,9 @@ function Board() {
 				newBoardState[tile.id].display,
 				newBoardState[emptyTile.id].display
 			];
-			displayMoveCount && headerReferences.updateMoveCount(++moveCount);
+			displayMoveCount && setMoveCount(moveCount + 1);
 			setBoardState(newBoardState);
-			displayMoveCount && headerReferences.updateHeaderText(I18n.get("SUBHEADER_TEXT"));
 		}
-	};
-
-	const updateHeaderReference = refs => {
-		headerReferences.updateHeaderText = refs.updateHeaderText;
-		headerReferences.updateMoveCount = refs.updateMoveCount;
 	};
 
 	const determineMove = (tile, emptyTile) =>
@@ -153,7 +146,7 @@ function Board() {
 	return (
 		<React.Fragment>
 			<div className='container'>
-				<Header updateHeaderReference={updateHeaderReference} moveCount={0} />
+				<Header subHeaderText={I18n.get("SUBHEADER_TEXT")} moveCount={0} />
 
 				<span className='subHeader'>{displayMsg}</span>
 
