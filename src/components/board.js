@@ -160,8 +160,11 @@ function Board() {
 				<Header updateHeaderReference={updateHeaderReference} moveCount={0} />
 
 				<span className='subHeader'>{displayMsg}</span>
+
 				<div className='board'>{makeRows()}</div>
+
 				<div>
+					<div className='scrambleButtonsHeader'>{I18n.get("BUTTONS_SCRAMBLE_HEADER_TEXT")}</div>
 					<button
 						onClick={() => {
 							onScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED);
