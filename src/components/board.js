@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row } from "./row";
 import { Header } from "./header";
 import { Buttons } from "./buttons";
@@ -17,29 +17,31 @@ const images = {
 	Amsterdam: "/assets/img/tiles/sliced Amsterdam"
 };
 
-// make the board that contains the tiles grid
-// @ return {object} - key:numeric, value:object {1:{}, 2:{},3(),...}
-const makeBoard = selectedImage => {
-	const board = [];
-	for (let i = 0; i < nrOfRows * nrOfCols; i++) {
-		const col = i % nrOfCols;
-		const row = Math.floor(i / nrOfCols);
-		board[i] = {
-			id: i,
-			display: `${images[selectedImage]}/row-${row}-col-${col}.jpg`,
-			row: row,
-			col: col,
-			type: i === emptyTileIndex ? "emptyTile" : "tile",
-			recentlyMoved: false
-		};
-	}
-	return board;
-};
-
 function Board() {
 	// define state hook
-	const [boardState, setBoardState] = useState(makeBoard("Worldmap"));
+	const [boardState, setBoardState] = useState([]);
 	const [moveCount, setMoveCount] = useState(0);
+
+	useEffect(() => setBoardState(makeBoard("Worldmap")), []);
+
+	// make the board that contains the tiles grid
+	// @ return {object} - key:numeric, value:object {1:{}, 2:{},3(),...}
+	const makeBoard = selectedImage => {
+		const board = [];
+		for (let i = 0; i < nrOfRows * nrOfCols; i++) {
+			const col = i % nrOfCols;
+			const row = Math.floor(i / nrOfCols);
+			board[i] = {
+				id: i,
+				display: `${images[selectedImage]}/row-${row}-col-${col}.jpg`,
+				row: row,
+				col: col,
+				type: i === emptyTileIndex ? "emptyTile" : "tile",
+				recentlyMoved: false
+			};
+		}
+		return board;
+	};
 
 	const onHandleClick = (tile, displayMoveCount = true) => {
 		// ignore clicks on the black square since it is not a tile
