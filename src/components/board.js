@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Row } from "./row";
 import { Header } from "./header";
+import { Buttons } from "./buttons";
 import { I18n } from "../Services/I18n";
 
 import "./board.scss";
@@ -10,12 +11,6 @@ const nrOfCols = 5;
 const emptyTileIndex = 0;
 let moveCount = 0;
 const headerReferences = {};
-const BEGINNER_NROFSCRAMBLES = 25;
-const INTERMEDIATE_NROFSCRAMBLES = 50;
-const PRO_NROFSCRAMBLES = 150;
-const ADAGIO_SCRAMBLESPEED = 500;
-const MODERATO_SCRAMBLESPEED = 350;
-const ALLEGRO_SCRAMBLESPEED = 200;
 
 // UI texts
 let displayMsg = "";
@@ -164,35 +159,7 @@ function Board() {
 
 				<div className='board'>{makeRows()}</div>
 
-				<div>
-					<div className='scrambleButtonsHeader'>{I18n.get("BUTTONS_SCRAMBLE_HEADER_TEXT")}</div>
-					<button
-						onClick={() => {
-							onScramble(BEGINNER_NROFSCRAMBLES, ADAGIO_SCRAMBLESPEED);
-						}}>
-						{I18n.get("BUTTON_SCRAMBLE_LEVEL_1")}
-					</button>
-					<button
-						onClick={() => {
-							onScramble(INTERMEDIATE_NROFSCRAMBLES, MODERATO_SCRAMBLESPEED);
-						}}>
-						{I18n.get("BUTTON_SCRAMBLE_LEVEL_2")}
-					</button>
-					<button
-						onClick={() => {
-							onScramble(PRO_NROFSCRAMBLES, ALLEGRO_SCRAMBLESPEED);
-						}}>
-						{I18n.get("BUTTON_SCRAMBLE_LEVEL_3")}
-					</button>
-				</div>
-				<div>
-					<button onClick={() => setBoardState(makeBoard("Amsterdam"))}>
-						{I18n.get("BUTTON_SELECT_IMAGE_AMSTERDAM")}
-					</button>
-					<button onClick={() => setBoardState(makeBoard("Worldmap"))}>
-						{I18n.get("BUTTON_SELECT_IMAGE_WORLD")}
-					</button>
-				</div>
+				<Buttons onScramble={onScramble} setBoardState={setBoardState} makeBoard={makeBoard} />
 			</div>
 		</React.Fragment>
 	);
