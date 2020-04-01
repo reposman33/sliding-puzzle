@@ -3,7 +3,7 @@ class I18n {
 
 	static UITexts = {
 		HEADER_TEXT: { en: "Unscramble the puzzle!", nl: "Los de puzzel op!" },
-		SUBHEADER_TEXT: { en: "Attempted moves:", nl: "Pogingen:" },
+		SUBHEADER_TEXT: { en: "Attempted moves:", nl: "Hussels:" },
 		DISPLAYPROGRESSTEXT: { en: "Please wait... scrambling", nl: "Even wachten... husselen..." },
 		FINISHEDPROGRESSTEXT: { en: "Finished. Start unscrambling", nl: "Klaar. Probeer de puzzel te maken" },
 		BUTTONS_SCRAMBLE_HEADER_TEXT: {
