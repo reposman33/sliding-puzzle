@@ -5,7 +5,7 @@ class I18n {
 		HEADER_TEXT: { en: "Unscramble the puzzle!", nl: "Los de puzzel op!" },
 		SUBHEADER_TEXT: { en: "Attempted moves:", nl: "Pogingen:" },
 		DISPLAYPROGRESSTEXT: { en: "Please wait... scrambling", nl: "Even wachten... husselen..." },
-		FINISHEDPROGRESSTEXT: { en: "Finished. Start unscrambling", nl: "Klaar Probeer de puzzel te maken" },
+		FINISHEDPROGRESSTEXT: { en: "Finished. Start unscrambling", nl: "Klaar. Probeer de puzzel te maken" },
 		BUTTON_SCRAMBLE_LEVEL_1: { en: "Simple scramble", nl: "Eenvoudig" },
 		BUTTON_SCRAMBLE_LEVEL_2: { en: "Intermediate scramble", nl: "Gevorderd" },
 		BUTTON_SCRAMBLE_LEVEL_3: { en: "Pro scramble", nl: "Professioneel" },
