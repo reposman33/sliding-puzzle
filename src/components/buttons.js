@@ -2,6 +2,7 @@ import React from "react";
 import { I18n } from "../Services/I18n";
 import "../constants";
 import * as constants from "../constants";
+import "./buttons.scss";
 
 const Buttons = ({ onScramble, setBoardState, makeBoard }) => {
 	const onClickScramble = (level, speed) => {
