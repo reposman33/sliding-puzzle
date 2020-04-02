@@ -42,7 +42,6 @@ const Buttons = ({ onScramble, setBoardState, makeBoard }) => {
 				</button>
 				<button onClick={() => onClickMakePuzzle("Worldmap")}>{I18n.get("BUTTON_SELECT_IMAGE_WORLD")}</button>
 			</div>
-			)
 		</React.Fragment>
 	);
 };
