@@ -1,5 +1,5 @@
 class I18n {
-	defaultLanguage = "nl";
+	static defaultLanguage = "en";
 
 	static UITexts = {
 		HEADER_TEXT: { en: "Unscramble the puzzle!", nl: "Los de puzzel op!" },
