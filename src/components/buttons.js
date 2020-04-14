@@ -9,14 +9,14 @@ const Buttons = ({ onScramble, setBoardState, makeBoard }) => {
 		onScramble(level, speed);
 	};
 
-	const onClickMakePuzzle = image => {
+	const onClickMakePuzzle = (image) => {
 		setBoardState(makeBoard(image));
 	};
 
 	return (
 		<React.Fragment>
 			<div>
-				<div className='scrambleButtonsHeader'>{I18n.get("BUTTONS_SCRAMBLE_HEADER_TEXT")}</div>
+				<div className='buttonsHeader'>{I18n.get("BUTTONS_SCRAMBLE_HEADER_TEXT")}</div>
 				<button
 					onClick={() => {
 						onClickScramble(constants.BEGINNER_NROFSCRAMBLES, constants.ADAGIO_SCRAMBLESPEED);
@@ -37,6 +37,7 @@ const Buttons = ({ onScramble, setBoardState, makeBoard }) => {
 				</button>
 			</div>
 			<div>
+				<div className='buttonsHeader'>{I18n.get("LABEL_BUTTON_SELECT_IMAGE")}</div>
 				<button onClick={() => onClickMakePuzzle("Amsterdam")}>
 					{I18n.get("BUTTON_SELECT_IMAGE_AMSTERDAM")}
 				</button>
