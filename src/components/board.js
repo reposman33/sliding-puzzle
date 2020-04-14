@@ -11,15 +11,18 @@ const nrOfCols = 5;
 const emptyTileIndex = 0;
 
 // UI texts
-let displayMsg = "";
+let progressbar = "";
+let percentage;
+let headerText = I18n.get("HEADER_TEXT");
+
 const images = {
 	Worldmap: "/assets/img/tiles/sliced Map of Europe",
-	Amsterdam: "/assets/img/tiles/sliced Amsterdam"
+	Amsterdam: "/assets/img/tiles/sliced Amsterdam",
 };
 
 // make the board that contains the tiles grid
 // @ return {object} - key:numeric, value:object {1:{}, 2:{},3(),...}
-const makeBoard = selectedImage => {
+const makeBoard = (selectedImage) => {
 	const board = [];
 	for (let i = 0; i < nrOfRows * nrOfCols; i++) {
 		const col = i % nrOfCols;
@@ -30,7 +33,7 @@ const makeBoard = selectedImage => {
 			row: row,
 			col: col,
 			type: i === emptyTileIndex ? "emptyTile" : "tile",
-			recentlyMoved: false
+			recentlyMoved: false,
 		};
 	}
 	return board;
@@ -47,7 +50,7 @@ function Board() {
 			return;
 		}
 		// retrieve the emptytile from it's type value
-		const emptyTile = boardState.filter(tile => tile.type === "emptyTile")[0];
+		const emptyTile = boardState.filter((tile) => tile.type === "emptyTile")[0];
 		// determine if the clicked tile can move and if so, where. possible values: north|south|east|west|undefined
 		const move = determineMove(tile, emptyTile);
 		// use an explicit boolean value instead of relying on undefined being false and a string being true
@@ -58,12 +61,12 @@ function Board() {
 			//swap types of tiles so the clicked tile becomnes the empty tile and vice versa
 			[newBoardState[emptyTile.id].type, newBoardState[tile.id].type] = [
 				newBoardState[tile.id].type,
-				newBoardState[emptyTile.id].type
+				newBoardState[emptyTile.id].type,
 			];
 			// swap display value of clicked tiles with emptytile
 			[newBoardState[emptyTile.id].display, newBoardState[tile.id].display] = [
 				newBoardState[tile.id].display,
-				newBoardState[emptyTile.id].display
+				newBoardState[emptyTile.id].display,
 			];
 			displayMoveCount && setMoveCount(moveCount + 1);
 			setBoardState(newBoardState);
@@ -98,6 +101,7 @@ function Board() {
 		let availableTiles = [];
 		let randomTileIndex;
 		let shuffleCount = 0;
+		const progresbarLength = 100; // characters
 
 		console.log("Follow the trailpath back!");
 
@@ -107,26 +111,28 @@ function Board() {
 		let intervalId = setInterval(() => {
 			// find the index of the current emptyTile
 			availableTiles = [];
-			emptyTile = boardState.find(tile => tile.type === "emptyTile");
+			emptyTile = boardState.find((tile) => tile.type === "emptyTile");
 			// determine tiles surrounding the empty tile we can swap
 			emptyTile.col - 1 > -1 && availableTiles.push(emptyTile.id - 1);
 			emptyTile.col + 1 < nrOfCols && availableTiles.push(emptyTile.id + 1);
 			emptyTile.row - 1 > -1 && availableTiles.push(emptyTile.id - nrOfCols);
 			emptyTile.row + 1 < nrOfRows && availableTiles.push(emptyTile.id + nrOfCols);
 			// filter any tile that has been moved the last time to prevent it from being shuffled back
-			availableTiles = availableTiles.filter(tileIndex => !_boardState[tileIndex].recentlyMoved);
+			availableTiles = availableTiles.filter((tileIndex) => !_boardState[tileIndex].recentlyMoved);
 			// pick a random tile index from the array of available tile indexes
 			randomTileIndex = availableTiles[Math.floor(Math.random() * availableTiles.length)];
 			// reset all recentlyMovedProperties
-			_boardState.map(tile => (tile.recentlyMoved = false));
+			_boardState.map((tile) => (tile.recentlyMoved = false));
 			// mark emptyTile as recentlyMoved. EmptyTile will swap and thus become the randomly selected tile
 			_boardState[emptyTile.id].recentlyMoved = true;
 
 			// create the UI message
 			shuffleCount += 1;
-			displayMsg = I18n.get("DISPLAYPROGRESSTEXT") + " " + Math.floor((shuffleCount / nrOfMoves) * 100) + "%";
+			percentage = Math.floor(shuffleCount * (100 / nrOfMoves));
+			progressbar = "|".repeat(Math.floor(shuffleCount * (progresbarLength / nrOfMoves)));
 			// when finished, display appropriate text
-			displayMsg = shuffleCount === nrOfMoves ? I18n.get("FINISHEDPROGRESSTEXT") : displayMsg;
+			headerText =
+				shuffleCount === nrOfMoves ? I18n.get("FINISHEDPROGRESSTEXT") : I18n.get("DISPLAYPROGRESSTEXT");
 			// log output with a hint
 			console.log(`shuffle ${shuffleCount} of ${nrOfMoves}: moving tile ${randomTileIndex}`);
 
@@ -137,7 +143,8 @@ function Board() {
 			if (shuffleCount === nrOfMoves) {
 				clearInterval(intervalId);
 				// setting this has result as soon as user clicks tile and component is rendered again
-				displayMsg = "";
+				progressbar = "";
+				percentage = "";
 				console.log("End of path. Follow the breadcrumbs back ;)");
 			}
 		}, scrambleSpeed);
@@ -146,9 +153,7 @@ function Board() {
 	return (
 		<React.Fragment>
 			<div className='container'>
-				<Header subHeaderText={I18n.get("SUBHEADER_TEXT")} moveCount={0} />
-
-				<span className='subHeader'>{displayMsg}</span>
+				<Header headerText={headerText} progressbar={progressbar} percentage={percentage} />
 
 				<div className='board'>{makeRows()}</div>
 

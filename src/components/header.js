@@ -1,12 +1,16 @@
 import React from "react";
-import { I18n } from "../Services/I18n";
 import "./header.scss";
 
-const Header = ({ subHeaderText, moveCount }) => {
+const Header = ({ headerText, progressbar, percentage }) => {
 	return (
 		<header className='header'>
-			<p>{I18n.get("HEADER_TEXT")}</p>
-			<p className='subHeader'>{moveCount ? `${subHeaderText} ${moveCount}` : ""}</p>
+			<p>{headerText}</p>
+			<span className='progressbar'>
+				{progressbar}
+				<span style={{ display: !!percentage ? "inline" : "none" }} className='percentage'>
+					{percentage}%
+				</span>
+			</span>
 		</header>
 	);
 };

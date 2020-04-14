@@ -8,7 +8,7 @@ class I18n {
 		HEADER_TEXT: { en: "Unscramble the puzzle!", nl: "Los de puzzel op!" },
 		SUBHEADER_TEXT: { en: "Attempted moves:", nl: "Hussels:" },
 		DISPLAYPROGRESSTEXT: { en: "Please wait... scrambling", nl: "Even wachten... husselen..." },
-		FINISHEDPROGRESSTEXT: { en: "Finished. Start unscrambling", nl: "Klaar. Probeer de puzzel te maken" },
+		FINISHEDPROGRESSTEXT: { en: "Start unscrambling", nl: "Probeer de puzzel te maken" },
 		BUTTONS_SCRAMBLE_HEADER_TEXT: {
 			en: "Click a button to scramble the puzzle",
 			nl: "Klik op een knop om de puzzel te husselen",
