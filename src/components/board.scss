@@ -1,7 +1,8 @@
 .container {
+	align-items: center;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	margin-top: 3rem;
 
 	& .board {
 		background-color: transparent;
