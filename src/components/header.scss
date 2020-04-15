@@ -6,8 +6,21 @@
 	justify-content: center;
 	width: 80%;
 
+	& .languagebutton {
+		font-size: 1rem;
+		margin-top: 1rem;
+
+		& .selected {
+			font-weight: bold;
+		}
+
+		& span {
+			cursor: pointer;
+		}
+	}
+
 	& p {
-		margin: 3rem 0 0 0;
+		margin: 1rem 0 0 0;
 	}
 	& .progressbar {
 		align-self: flex-start;

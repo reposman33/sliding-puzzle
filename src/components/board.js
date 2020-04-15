@@ -10,11 +10,6 @@ const nrOfRows = 4;
 const nrOfCols = 5;
 const emptyTileIndex = 0;
 
-// UI texts
-let progressbar = "";
-let percentage;
-let headerText = I18n.get("HEADER_TEXT");
-
 const images = {
 	Worldmap: "/assets/img/tiles/sliced Map of Europe",
 	Amsterdam: "/assets/img/tiles/sliced Amsterdam",
@@ -43,6 +38,10 @@ function Board() {
 	// define state hook
 	const [boardState, setBoardState] = useState(makeBoard("Worldmap"));
 	const [moveCount, setMoveCount] = useState(0);
+	// UI texts
+	let progressbar = "";
+	let percentage;
+	let headerText = I18n.get("HEADER_TEXT");
 
 	const onHandleClick = (tile, displayMoveCount = true) => {
 		// ignore clicks on the black square since it is not a tile
@@ -150,10 +149,22 @@ function Board() {
 		}, scrambleSpeed);
 	};
 
+	const selectLanguage = (ev) => {
+		I18n.selectLanguage(ev.target.attributes["data-lang"].value);
+		// force-render. By every time providing a new value React re-renders the Board component
+		setMoveCount(Math.random() * 100);
+	};
+
 	return (
 		<React.Fragment>
 			<div className='container'>
-				<Header headerText={headerText} progressbar={progressbar} percentage={percentage} />
+				<Header
+					headerText={headerText}
+					progressbar={progressbar}
+					percentage={percentage}
+					selectLanguage={selectLanguage}
+					selectedLanguage={I18n.selectedLanguage}
+				/>
 
 				<div className='board'>{makeRows()}</div>
 
