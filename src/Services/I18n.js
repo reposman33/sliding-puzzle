@@ -18,7 +18,7 @@ class I18n {
 		BUTTON_SCRAMBLE_LEVEL_3: { en: "150 scrambles", nl: "150 hussels" },
 		BUTTON_SELECT_IMAGE_AMSTERDAM: { en: "Amsterdam", nl: "Amsterdam" },
 		BUTTON_SELECT_IMAGE_WORLD: { en: "Worldmap", nl: "Wereldkaart" },
-		LABEL_BUTTON_SELECT_IMAGE: { en: "Select an image", nl: "Selecteer een puzzel" },
+		LABEL_BUTTON_SELECT_IMAGE: { en: "Select a puzzle", nl: "Selecteer een puzzel" },
 	};
 	static get = (token) => I18n.UITexts[token][I18n.selectedLanguage];
 }
